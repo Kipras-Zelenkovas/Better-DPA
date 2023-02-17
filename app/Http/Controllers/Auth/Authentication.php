@@ -16,7 +16,7 @@ class Authentication extends Controller
         try {
             $credentials = $request->validate([
                 'email'     => 'string|email:rfc,dns|max:40|required',
-                'password'  => 'string|min:3|max:40|required'
+                'password'  => 'string|min:8|max:40|required'
             ]);
 
             if (Auth::attempt($credentials)) {
@@ -24,7 +24,8 @@ class Authentication extends Controller
 
 
                 return response()->json([
-                    'token' => $request->user()->createToken("API TOKEN")->plainTextToken,
+                    'message'   => 'User successfully loged in',
+                    'token'     => $request->user()->createToken("API TOKEN")->plainTextToken,
                 ]);
             } else {
                 return response()->json([
@@ -42,7 +43,7 @@ class Authentication extends Controller
             $validated = $request->validate([
                 'name'      => 'string|max:25|required',
                 'email'     => 'string|max:40|email:rfc,dns|required',
-                'password'  => 'string|min:3|max:40|required'
+                'password'  => 'string|min:8|max:40|required'
             ]);
 
             $validated['password'] = Hash::make($validated['password']);
@@ -52,7 +53,7 @@ class Authentication extends Controller
             $user->save();
 
             return response()->json([
-                'message'   => 'user successfully created'
+                'message'   => 'User successfully created'
             ]);
 
             // return response()->json($validated);
